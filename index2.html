@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Academic Board Exam Study & Exam Portal</title>
+  <link rel="stylesheet" href="style2.css">
+</head>
+<body>
+
+  <!-- Top Red Warning Banner -->
+  <div class="top-warning-banner">
+    ⚠️ সতর্কবার্তা: এটি আপনাদের উপকারে আসবে বলে আমি ধারণা করছি, তবে এগুলো AI দিয়ে বানানো। যদি কোনো কিছু ভুল হয়ে থাকে তার জন্য ওয়েবসাইট নির্মাতা দায়ী থাকবে না।
+  </div>
+
+  <main class="container">
+
+    <!-- Header Section -->
+    <header class="app-header">
+      <h1>📚 Academic Board Exam Portal</h1>
+      <p>বিগত ৬ বছরের বোর্ড পরীক্ষার প্রশ্নব্যাংক, স্টাডি ট্র্যাকার ও এক্সাম সিস্টেম</p>
+    </header>
+
+    <!-- Tracker & Dashboard Panel -->
+    <section class="dashboard-panel">
+      <!-- Calendar View -->
+      <div class="dash-card">
+        <h3>📅 সেমিস্টার স্টাডি ট্র্যাকার</h3>
+        <div id="calendarGrid" class="calendar-grid"></div>
+      </div>
+
+      <!-- Live Daily Stats -->
+      <div class="dash-card">
+        <h3>📊 দৈনিক পড়াশোনার হিসাব</h3>
+        <div class="stats-summary">
+          <div class="stat-row">
+            <label>📅 সেমিস্টার শুরুর তারিখ:</label>
+            <input type="date" id="startDateInput" />
+            <button id="setStartDateBtn" class="sm-btn">সেট করুন</button>
+            <small id="changeCountText" style="display:block; color:var(--muted); font-size:11px; margin-top:3px;"></small>
+          </div>
+
+          <div class="stat-info-box" style="margin-top: 10px; background: rgba(0,0,0,0.03); padding: 10px; border-radius: 8px;">
+            <p>📚 মোট পড়ার দিন: <strong id="daysStudiedCount">0</strong> দিন</p>
+            <p>📖 আজকের পড়া প্রশ্ন: <strong id="todayMcqCount">0</strong> টি</p>
+            <p>✅ আজকের সঠিক উত্তর: <strong id="todayCorrectCount" style="color: green;">0</strong> টি</p>
+            <p>❌ আজকের ভুল উত্তর: <strong id="todayWrongCount" style="color: red;">0</strong> টি</p>
+          </div>
+        </div>
+
+        <button id="startMonthlyExamBtn" class="primary-btn">📝 ১০০ প্রশ্নের বিশেষ পরীক্ষা</button>
+      </div>
+
+      <!-- 60 Days History Board -->
+      <div class="dash-card" style="grid-column: 1 / -1; margin-top: 10px;">
+        <h3>📜 ৬০ দিনের স্টাডি রেকর্ড বোর্ড</h3>
+        <div id="historyBoard" class="history-board-list"></div>
+      </div>
+    </section>
+
+    <!-- Control Panel -->
+    <section class="control-panel">
+      
+      <!-- Academic Level Dropdown -->
+      <div class="course-selector-box" style="width: 100%; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee;">
+        <label>🎓 একাডেমিক লেভেল নির্বাচন করুন: </label>
+        <select id="courseLevelSelect" class="course-dropdown">
+          <option value="honours_mgt" selected>অনার্স (ব্যবস্থাপনা বিভাগ)</option>
+          <option value="hsc_humanities">এইচএসসি - মানবিক গ্রুপ</option>
+          <option value="hsc_science">এইচএসসি - বিজ্ঞান গ্রুপ</option>
+          <option value="hsc_business">এইচএসসি - ব্যবসায় শিক্ষা গ্রুপ</option>
+        </select>
+      </div>
+
+      <!-- Honours Management Subject Dashboard -->
+      <div id="honoursSubjectDashboard" class="subject-dashboard" style="width: 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 15px;">
+        <div class="subject-card active" data-subject="intro_mgt">📘 ব্যবস্থাপনার নীতি</div>
+        <div class="subject-card" data-subject="principles_mkt">📙 বাজারজাতকরণ নীতি</div>
+        <div class="subject-card" data-subject="fin_acc">📗 আর্থিক হিসাববিজ্ঞান</div>
+        <div class="subject-card" data-subject="bus_law">📕 ব্যবসায় আইন</div>
+        <div class="subject-card" data-subject="org_behavior">📒 সাংগঠনিক আচরণ</div>
+        <div class="subject-card" data-subject="hr_mgt">📓 মানব সম্পদ ব্যবস্থাপনা</div>
+      </div>
+
+      <!-- HSC Subject Dashboard (Dynamic) -->
+      <div id="hscSubjectDashboard" class="subject-dashboard" style="width: 100%; display: none; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 15px;">
+      </div>
+
+      <!-- Mode Selector -->
+      <div class="mode-selector">
+        <label>
+          <input type="radio" name="appMode" value="study" checked> 📖 পড়ার মোড (জ্ঞানমূলক প্রশ্ন ও উত্তর)
+        </label>
+        <label>
+          <input type="radio" name="appMode" value="exam"> 📝 পরীক্ষা মোড (MCQ Exam)
+        </label>
+      </div>
+
+      <!-- Input Controls & Actions -->
+      <div class="control-inputs">
+        <label for="questionCount">প্রশ্ন সংখ্যা (১-১০০০০):</label>
+        <input type="number" id="questionCount" value="10" min="1" max="10000">
+        
+        <button id="startExamBtn" class="action-btn">প্রশ্ন লোড করুন</button>
+        <button id="nextQuestionSetBtn" class="action-btn refresh-btn">🔄 নতুন প্রশ্ন পড়ুন (New Set)</button>
+      </div>
+    </section>
+
+    <!-- Question Display Container -->
+    <section id="questionContainer" class="question-container"></section>
+
+    <!-- Submit Controls -->
+    <section class="action-footer">
+      <div id="progressBar" class="progress-bar">
+        <div id="progressFill" class="progress-fill"></div>
+      </div>
+      <button id="submitExamBtn" class="submit-btn">✓ Submit Exam</button>
+    </section>
+
+    <!-- Result Display Panel -->
+    <section id="resultPanel" class="result-panel" style="display: none;"></section>
+
+  </main>
+
+  <script src="script2.js"></script>
+</body>
+</html>
